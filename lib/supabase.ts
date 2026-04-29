@@ -28,6 +28,10 @@ export async function logSortingEvent(
     const resolvedUserId =
       event.userId ?? (await supabase.auth.getUser()).data.user?.id ?? null
 
+    if (!resolvedUserId) {
+      return
+    }
+
     const { error } = await supabase.from('sorting_events').insert({
       category: event.category,
       label: event.label,

@@ -121,8 +121,9 @@ export default function ResultScreen() {
           {imageUri ? (
             <Image source={{ uri: imageUri }} style={styles.image} resizeMode="cover" />
           ) : (
-            <View style={[styles.image, styles.imagePlaceholder]}>
-              <Text style={styles.imagePlaceholderText}>📸</Text>
+            <View style={[styles.image, styles.imagePlaceholder, { backgroundColor: accentColor + '15' }]}>
+              <Text style={styles.textLookupIcon}>🔍</Text>
+              <Text style={styles.textLookupLabel}>{result.label}</Text>
             </View>
           )}
 
@@ -212,9 +213,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#e8e4dc',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 24,
+    gap: 8,
   },
-  imagePlaceholderText: {
-    fontSize: 48,
+  textLookupIcon: {
+    fontSize: 42,
+    opacity: 0.8,
+  },
+  textLookupLabel: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
+    textAlign: 'center',
+    textTransform: 'capitalize',
   },
   imageScrim: {
     position: 'absolute',

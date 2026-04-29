@@ -64,6 +64,46 @@ export async function classifyWaste(
     } else {
       console.error('[gemini] Classification failed:', err);
     }
-    return null
+    return null;
   }
 }
+
+export async function classifyWasteByText(query: string): Promise<ClassificationResult | null> {
+  try {
+    const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error('[gemini] Missing API Key');
+      return null;
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-3.1-flash-lite-preview',
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: responseSchema,
+      }
+    });
+
+    const textPrompt = `You are a waste classification assistant for an Indian municipal waste segregation app.
+Analyze the following waste item: "${query}" and classify it into exactly one of these five categories:
+- wet: food waste, organic matter, garden waste
+- dry: non-recyclable dry waste, dirty packaging
+- recyclable: clean plastics, glass, metals, paper/cardboard
+- hazardous: batteries, chemicals, paint, medical waste
+- ewaste: electronics, cables, devices, circuit boards`;
+
+    const result = await model.generateContent([textPrompt]);
+
+    const text = result.response.text();
+    return JSON.parse(text) as ClassificationResult;
+
+  } catch (err: any) {
+    if (err.message?.includes('429')) {
+      console.error('[gemini] Quota exceeded. Lite models still have limits on the free tier!');
+    } else {
+      console.error('[gemini] Text Classification failed:', err);
+    }
+    return null;
+  }
+}

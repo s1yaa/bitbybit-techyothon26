@@ -4,10 +4,12 @@ import * as ImagePicker from 'expo-image-picker'
 import { router } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
+  Keyboard,
   Platform,
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -27,8 +29,9 @@ export default function ScanScreen() {
   const [isOffline] = useState(false)
   const [isCapturing, setIsCapturing] = useState(false)
   const [permission, requestPermission] = useCameraPermissions()
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const { classify, isLoading } = useClassify()
+  const { classify, classifyText, isLoading } = useClassify()
   const result = useClassificationStore((s) => s.result)
   const reset = useClassificationStore((s) => s.reset)
   const streakDays = useUserStore((s) => s.streakDays)
@@ -91,6 +94,14 @@ export default function ScanScreen() {
     setFlash((prev) => (prev === 'off' ? 'on' : 'off'))
   }, [])
 
+  const handleSearch = useCallback(async () => {
+    if (!searchQuery.trim() || isLoading || isCapturing) return
+    Keyboard.dismiss()
+    didCapture.current = true
+    await classifyText(searchQuery.trim())
+    setSearchQuery('')
+  }, [searchQuery, isLoading, isCapturing, classifyText])
+
   if (!permission) return <View style={styles.root} />
 
   if (!permission.granted) {
@@ -127,6 +138,28 @@ export default function ScanScreen() {
             <Text style={styles.streakText}>{streakDays}d streak</Text>
           </View>
         )}
+      </View>
+
+      <View style={styles.searchWrapper}>
+        <View style={styles.searchBar}>
+          <Ionicons name="search" size={20} color="rgba(255,255,255,0.6)" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search item (e.g. aerosol can)"
+            placeholderTextColor="rgba(255,255,255,0.4)"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            onSubmitEditing={handleSearch}
+            returnKeyType="search"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity onPress={() => setSearchQuery('')} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
+              <Ionicons name="close-circle" size={20} color="rgba(255,255,255,0.6)" />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <View style={styles.bannerWrapper}>
@@ -226,5 +259,29 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '600',
+  },
+  searchWrapper: {
+    position: 'absolute',
+    top: 100,
+    left: 20,
+    right: 20,
+    zIndex: 10,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    height: 52,
+    borderWidth: 0.5,
+    borderColor: 'rgba(255,255,255,0.15)',
+    gap: 12,
+  },
+  searchInput: {
+    flex: 1,
+    color: '#FFFFFF',
+    fontSize: 16,
+    height: '100%',
   },
 })
