@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import CategoryChart from '@/components/dashboard/CategoryChart';
 import ImpactStrip from '@/components/dashboard/ImpactStrip';
+import RecyclingRateChart from '@/components/dashboard/RecyclingRateChart';
 import StreakRow from '@/components/dashboard/StreakRow';
 
 import { useImpact } from '@/hooks/useImpact';
@@ -13,6 +14,7 @@ export default function Dashboard() {
     co2Saved,
     landfillDiverted,
     breakdown,
+    recyclingRateTrend,
   } = useImpact();
 
   const { daysThisWeek } = useStreak();
@@ -32,6 +34,9 @@ export default function Dashboard() {
 
       <Text style={styles.sectionLabel}>BREAKDOWN</Text>
       <CategoryChart breakdown={breakdown} />
+
+      <Text style={styles.sectionLabel}>RECYCLING RATE OVER TIME</Text>
+      <RecyclingRateChart data={recyclingRateTrend} />
 
       <Text style={styles.sectionLabel}>DAILY STREAK</Text>
       <StreakRow daysThisWeek={daysThisWeek} />

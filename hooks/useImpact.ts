@@ -2,6 +2,7 @@ import {
   calcCO2Saved,
   calcLandfillDiverted,
   getCategoryBreakdown,
+  getRecyclingRateTrend,
 } from '@/lib/impact';
 import { useScanStore } from '@/store/scanStore';
 import { useMemo } from 'react';
@@ -15,6 +16,8 @@ export function useImpact() {
   const breakdown = useMemo(() => getCategoryBreakdown(events), [events]);
   const weeklyTrend = useMemo(() => getWeeklyTrend(events), [events]);
 
+  const recyclingRateTrend = useMemo(() => getRecyclingRateTrend(events), [events]);
+
   return {
     events,
     totalSorted,
@@ -22,6 +25,7 @@ export function useImpact() {
     landfillDiverted,
     breakdown,
     weeklyTrend,
+    recyclingRateTrend,
     isLoading: false,
   };
 }
