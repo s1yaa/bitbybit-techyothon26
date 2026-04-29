@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 interface Props {
@@ -9,18 +9,18 @@ interface Props {
 }
 
 const screenWidth = Dimensions.get('window').width;
-const cardWidth = (screenWidth - 52) / 3; // 16px side padding × 2 + 2 gaps of 6
+const cardWidth = (screenWidth - 52) / 3;
 
 const CARDS = [
-  { key: 'sorted',    label: 'Items Sorted',     icon: 'leaf',         color: '#16A34A', bg: '#DCFCE7' },
-  { key: 'co2',       label: 'CO₂ Saved',         icon: 'cloud-outline', color: '#2563EB', bg: '#DBEAFE' },
-  { key: 'landfill',  label: 'Landfill Saved',    icon: 'trash-outline', color: '#D97706', bg: '#FEF3C7' },
+  { key: 'sorted', label: 'Items Sorted', icon: 'leaf', color: '#16A34A', bg: '#DCFCE7' },
+  { key: 'co2', label: 'CO₂ Saved', icon: 'cloud-outline', color: '#2563EB', bg: '#DBEAFE' },
+  { key: 'landfill', label: 'Landfill Saved', icon: 'trash-outline', color: '#D97706', bg: '#FEF3C7' },
 ] as const;
 
 export default function ImpactStrip({ totalSorted, co2Saved, landfillDiverted }: Props) {
   const values = {
     sorted: totalSorted.toString(),
-    co2:    `${co2Saved} kg`,
+    co2: `${co2Saved} kg`,
     landfill: `${landfillDiverted} kg`,
   };
 

@@ -23,8 +23,8 @@ export default function RecyclingRateChart({ data }: Props) {
     activeDays.length === 0
       ? 0
       : Math.round(
-          activeDays.reduce((sum, d) => sum + d.rate, 0) / activeDays.length
-        );
+        activeDays.reduce((sum, d) => sum + d.rate, 0) / activeDays.length
+      );
   const showLabel = (i: number) => i % 2 === 0;
 
   return (
@@ -75,8 +75,8 @@ export default function RecyclingRateChart({ data }: Props) {
                         backgroundColor: today
                           ? '#4ade80'
                           : hasData
-                          ? '#7DB87A'
-                          : '#e5e7eb',
+                            ? '#7DB87A'
+                            : '#e5e7eb',
                         opacity: hasData ? 1 : 0.4,
                       },
                     ]}
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     color: '#16A34A',
   },
   chartArea: {
-    height: CHART_H + 24,  // extra room for guide labels
+    height: CHART_H + 24,
     position: 'relative',
   },
   guideLine: {

@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import { useBadges } from '@/hooks/useBadges';
 import { useUserStore } from '@/store/userStore';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import {
   Alert,
@@ -137,6 +138,7 @@ function SettingRow({
 export default function Profile() {
   const { user, totalScans: totalSorted, streakDays: streakCount, reset } = useUserStore();
   const { ecoLevel } = useBadges();
+  const router = useRouter();
   const userId = user?.id;
 
   const name = userId ? `Eco User #${userId.slice(0, 6).toUpperCase()}` : 'Guest';
@@ -233,7 +235,7 @@ export default function Profile() {
             label="Notifications"
             iconColor={C.amber}
             iconBg={C.amberDim}
-            onPress={() => Alert.alert('Notifications', 'Notification settings coming soon!')}
+            onPress={() => router.push('/notifications')}
           />
           <SettingRow
             icon="shield-checkmark"

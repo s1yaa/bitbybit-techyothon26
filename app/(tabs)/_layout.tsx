@@ -49,6 +49,16 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name="locator"
+        options={{
+          title: 'Locator',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="leaderboard"
         options={{
           title: 'Ranks',

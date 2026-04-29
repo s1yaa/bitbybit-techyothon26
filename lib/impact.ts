@@ -62,9 +62,9 @@ export function getPercentileMessage(
 }
 
 export interface RecyclingRatePoint {
-  date: string;      // ISO date string YYYY-MM-DD
-  rate: number;      // 0–100 percentage
-  total: number;     // total items scanned that day
+  date: string;
+  rate: number;
+  total: number;
   recyclable: number;
 }
 
