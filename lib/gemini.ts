@@ -1,7 +1,23 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import type { ClassificationResult, WasteCategory } from '../types'
+import { GoogleGenerativeAI, Schema, SchemaType } from '@google/generative-ai';
+import type { ClassificationResult, WasteCategory } from '../types';
 
 const VALID_CATEGORIES: WasteCategory[] = ['wet', 'dry', 'recyclable', 'hazardous', 'ewaste']
+
+// Explicitly typing as Schema to avoid the TypeScript errors from before
+const responseSchema: Schema = {
+  type: SchemaType.OBJECT,
+  properties: {
+    category: {
+      type: SchemaType.STRING,
+      description: "One of: wet, dry, recyclable, hazardous, ewaste",
+    },
+    label: { type: SchemaType.STRING },
+    confidence: { type: SchemaType.NUMBER },
+    explanation: { type: SchemaType.STRING },
+    tip: { type: SchemaType.STRING },
+  },
+  required: ["category", "label", "confidence", "explanation", "tip"],
+};
 
 const CLASSIFICATION_PROMPT = `You are a waste classification assistant for an Indian municipal waste segregation app.
 Analyze the image and classify the waste item into exactly one of these five categories:
@@ -9,16 +25,7 @@ Analyze the image and classify the waste item into exactly one of these five cat
 - dry: non-recyclable dry waste, dirty packaging
 - recyclable: clean plastics, glass, metals, paper/cardboard
 - hazardous: batteries, chemicals, paint, medical waste
-- ewaste: electronics, cables, devices, circuit boards
-
-Respond ONLY with valid JSON — no markdown, no code fences, no extra text — matching this exact shape:
-{
-  "category": "<one of: wet | dry | recyclable | hazardous | ewaste>",
-  "label": "<specific item name, e.g. Plastic bottle (PET)>",
-  "confidence": <float between 0 and 1>,
-  "explanation": "<1–2 sentences about why this classification was chosen>",
-  "tip": "<one actionable disposal tip>"
-}`
+- ewaste: electronics, cables, devices, circuit boards`;
 
 export async function classifyWaste(
   base64Image: string,
@@ -27,12 +34,20 @@ export async function classifyWaste(
   try {
     const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY
     if (!apiKey) {
-      console.error('[gemini] Missing EXPO_PUBLIC_GEMINI_API_KEY')
+      console.error('[gemini] Missing API Key')
       return null
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+    // Updated to the 3.1 Flash Lite model from your screenshot
+    const model = genAI.getGenerativeModel({
+      model: 'gemini-3.1-flash-lite-preview',
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: responseSchema,
+      }
+    })
 
     const result = await model.generateContent([
       CLASSIFICATION_PROMPT,
@@ -44,32 +59,15 @@ export async function classifyWaste(
       },
     ])
 
-    const text = result.response.text().trim()
+    const text = result.response.text()
+    return JSON.parse(text) as ClassificationResult
 
-    const clean = text.replace(/```json|```/g, '').trim()
-    const parsed = JSON.parse(clean) as Partial<ClassificationResult>
-
-    if (
-      !parsed.category ||
-      !VALID_CATEGORIES.includes(parsed.category) ||
-      typeof parsed.confidence !== 'number' ||
-      !parsed.label ||
-      !parsed.explanation ||
-      !parsed.tip
-    ) {
-      console.error('[gemini] Invalid response shape:', parsed)
-      return null
+  } catch (err: any) {
+    if (err.message?.includes('429')) {
+      console.error('[gemini] Quota exceeded. Lite models still have limits on the free tier!');
+    } else {
+      console.error('[gemini] Classification failed:', err);
     }
-
-    return {
-      category: parsed.category,
-      label: parsed.label,
-      confidence: Math.max(0, Math.min(1, parsed.confidence)),
-      explanation: parsed.explanation,
-      tip: parsed.tip,
-    }
-  } catch (err) {
-    console.error('[gemini] Classification failed:', err)
     return null
   }
 }

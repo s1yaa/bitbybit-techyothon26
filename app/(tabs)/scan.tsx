@@ -25,22 +25,37 @@ export default function ScanScreen() {
   const [facing] = useState<CameraType>('back')
   const [flash, setFlash] = useState<FlashMode>('off')
   const [isOffline] = useState(false)
+  const [isCapturing, setIsCapturing] = useState(false)
   const [permission, requestPermission] = useCameraPermissions()
 
   const { classify, isLoading } = useClassify()
   const result = useClassificationStore((s) => s.result)
+  const reset = useClassificationStore((s) => s.reset)
   const streakDays = useUserStore((s) => s.streakDays)
 
+  // Track whether we intentionally started a capture in this session
+  const didCapture = useRef(false)
+
+  // Clear any stale result from a previous scan when this screen mounts
   useEffect(() => {
-    if (result && !isLoading) {
+    reset()
+    didCapture.current = false
+  }, [])
+
+  // Navigate to result only after a capture we started ourselves
+  useEffect(() => {
+    if (result && !isLoading && didCapture.current) {
+      didCapture.current = false
       router.push('/(result)/result' as any)
     }
   }, [result, isLoading])
 
   const handleCapture = useCallback(async () => {
-    if (!cameraRef.current || isLoading) return
+    if (!cameraRef.current || isLoading || isCapturing) return
 
     try {
+      setIsCapturing(true)
+      didCapture.current = true
       const photo = await cameraRef.current.takePictureAsync({
         quality: 0.8,
         base64: false,
@@ -49,14 +64,20 @@ export default function ScanScreen() {
 
       if (photo?.uri) {
         await classify(photo.uri)
+      } else {
+        // Photo failed; reset the flag so the guard stays correct
+        didCapture.current = false
       }
     } catch (err) {
       console.error('[scan] capture error:', err)
+      didCapture.current = false
+    } finally {
+      setIsCapturing(false)
     }
-  }, [isLoading, classify])
+  }, [isLoading, isCapturing, classify])
 
   const handleGallery = useCallback(async () => {
-    if (isLoading) return
+    if (isLoading || isCapturing) return
 
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (status !== 'granted') return
@@ -68,9 +89,10 @@ export default function ScanScreen() {
     })
 
     if (!picked.canceled && picked.assets[0]?.uri) {
+      didCapture.current = true
       await classify(picked.assets[0].uri)
     }
-  }, [isLoading, classify])
+  }, [isLoading, isCapturing, classify])
 
   const toggleFlash = useCallback(() => {
     setFlash((prev) => (prev === 'off' ? 'on' : 'off'))
@@ -124,11 +146,11 @@ export default function ScanScreen() {
           onGalleryPress={handleGallery}
           onFlashToggle={toggleFlash}
           flashEnabled={flash === 'on'}
-          disabled={isLoading}
+          disabled={isLoading || isCapturing}
         />
       </View>
 
-      <LoadingOverlay visible={isLoading} message="Identifying waste…" />
+      <LoadingOverlay visible={isLoading || isCapturing} message="Identifying waste…" />
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system/legacy'
 import { useCallback } from 'react'
 import { classifyWaste } from '../lib/gemini'
 import { logSortingEvent } from '../lib/supabase'
