@@ -83,7 +83,7 @@ export default function ScanScreen() {
     if (status !== 'granted') return
 
     const picked = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: 'images' as ImagePicker.MediaType,
       quality: 0.8,
       allowsEditing: false,
     })

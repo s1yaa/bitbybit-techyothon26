@@ -26,12 +26,16 @@ export async function logSortingEvent(
       userId,
     }
 
+    // Fall back to the live session user ID in case the store hasn't hydrated yet
+    const resolvedUserId =
+      event.userId ?? (await supabase.auth.getUser()).data.user?.id ?? null
+
     const { error } = await supabase.from('sorting_events').insert({
       category: event.category,
       label: event.label,
       confidence: result.confidence,
       timestamp: event.timestamp,
-      user_id: event.userId ?? null,
+      user_id: resolvedUserId,
     })
 
     if (error) {

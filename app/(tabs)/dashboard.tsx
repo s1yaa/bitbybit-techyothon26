@@ -13,24 +13,16 @@ export default function Dashboard() {
     co2Saved,
     landfillDiverted,
     breakdown,
-    isLoading,
   } = useImpact();
 
   const { daysThisWeek } = useStreak();
 
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading impact...</Text>
-      </View>
-    );
-  }
-
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>      <View style={styles.header}>
-      <Text style={styles.subheading}>THIS WEEK</Text>
-      <Text style={styles.heading}>Your impact</Text>
-    </View>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 24 }}>
+      <View style={styles.header}>
+        <Text style={styles.subheading}>THIS WEEK</Text>
+        <Text style={styles.heading}>Your impact</Text>
+      </View>
 
       <ImpactStrip
         totalSorted={totalSorted}
@@ -74,13 +66,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 8,
     paddingHorizontal: 12,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    color: '#6b7280',
   },
 });

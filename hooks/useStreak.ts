@@ -1,48 +1,22 @@
-import { useUserStore } from '@/store/userStore';
-import { SortingEvent } from '@/types';
-import { useEffect, useState } from 'react';
-
-const MOCK_EVENTS: SortingEvent[] = [
-  { id: '1', category: 'recyclable', label: 'Bottle', confidence: 0.9, timestamp: new Date().toISOString() },
-  { id: '2', category: 'dry', label: 'Paper', confidence: 0.9, timestamp: new Date(Date.now() - 86400000).toISOString() },
-  { id: '3', category: 'wet', label: 'Food', confidence: 0.9, timestamp: new Date(Date.now() - 2 * 86400000).toISOString() },
-];
+import { useScanStore } from '@/store/scanStore';
+import { useMemo } from 'react';
 
 export function useStreak() {
-  const [events, setEvents] = useState<SortingEvent[]>([]);
-  const [streakDays, setStreakDays] = useState(0);
-  const [daysThisWeek, setDaysThisWeek] = useState<boolean[]>(Array(7).fill(false));
+  const events = useScanStore((s) => s.events);
 
-  const setStreakStore = useUserStore((s) => s.incrementStreak);
-  const resetStore = useUserStore((s) => s.reset);
-
-  useEffect(() => {
-    setEvents(MOCK_EVENTS);
-  }, []);
-
-  useEffect(() => {
-    if (events.length === 0) return;
-
-    const streak = calculateStreak(events);
-    const week = calculateDaysThisWeek(events);
-
-    setStreakDays(streak);
-    setDaysThisWeek(week);
-
-    useUserStore.setState({ streakDays: streak });
-
-  }, [events]);
+  const streakDays = useMemo(() => calculateStreak(events), [events]);
+  const daysThisWeek = useMemo(() => calculateDaysThisWeek(events), [events]);
 
   return { streakDays, daysThisWeek };
 }
 
-function calculateStreak(events: SortingEvent[]): number {
+function calculateStreak(events: ReturnType<typeof useScanStore.getState>['events']): number {
   const dates = new Set(
     events.map((e) => e.timestamp.split('T')[0])
   );
 
   let streak = 0;
-  let current = new Date();
+  const current = new Date();
 
   while (true) {
     const key = current.toISOString().split('T')[0];
@@ -58,9 +32,7 @@ function calculateStreak(events: SortingEvent[]): number {
   return streak;
 }
 
-function calculateDaysThisWeek(events: SortingEvent[]): boolean[] {
-  const result = Array(7).fill(false);
-
+function calculateDaysThisWeek(events: ReturnType<typeof useScanStore.getState>['events']): boolean[] {
   const now = new Date();
   const day = now.getDay();
 
