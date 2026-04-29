@@ -8,7 +8,6 @@ interface Props {
 
 export default function CategoryChart({ breakdown }: Props) {
   const entries = Object.entries(breakdown) as [WasteCategory, number][];
-
   const maxValue = Math.max(...entries.map(([, v]) => v), 1);
 
   return (
@@ -19,30 +18,30 @@ export default function CategoryChart({ breakdown }: Props) {
 
         return (
           <View key={category} style={styles.row}>
-
             <View style={styles.left}>
-              <View
-                style={[
-                  styles.dot,
-                  { backgroundColor: config.color },
-                ]}
-              />
+              <View style={[styles.iconDot, { backgroundColor: config.color + '22' }]}>
+                <View style={[styles.dotInner, { backgroundColor: config.color }]} />
+              </View>
               <Text style={styles.label}>{config.label}</Text>
             </View>
 
-            <View style={styles.track}>
-              <View
-                style={[
-                  styles.fill,
-                  {
-                    width: `${widthPercent}%`,
-                    backgroundColor: config.color,
-                  },
-                ]}
-              />
+            <View style={styles.trackWrap}>
+              <View style={styles.track}>
+                <View
+                  style={[
+                    styles.fill,
+                    {
+                      width: `${widthPercent}%`,
+                      backgroundColor: config.color,
+                    },
+                  ]}
+                />
+              </View>
             </View>
 
-            <Text style={styles.count}>{count}</Text>
+            <View style={[styles.countBadge, { backgroundColor: config.color + '18' }]}>
+              <Text style={[styles.count, { color: config.color }]}>{count}</Text>
+            </View>
           </View>
         );
       })}
@@ -52,45 +51,63 @@ export default function CategoryChart({ breakdown }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 16,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
   },
   left: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 110,
+    width: 115,
+    gap: 8,
   },
-  dot: {
+  iconDot: {
+    width: 22,
+    height: 22,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  dotInner: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    marginRight: 6,
   },
   label: {
     fontSize: 13,
     color: '#374151',
+    fontWeight: '500',
+    flexShrink: 1,
+  },
+  trackWrap: {
+    flex: 1,
+    marginHorizontal: 10,
   },
   track: {
-    flex: 1,
-    height: 8,
-    backgroundColor: '#f0ede6',
+    height: 7,
+    backgroundColor: '#F3F4F6',
     borderRadius: 4,
     overflow: 'hidden',
-    marginHorizontal: 8,
   },
   fill: {
-    height: 8,
+    height: 7,
     borderRadius: 4,
   },
+  countBadge: {
+    width: 30,
+    height: 22,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   count: {
-    width: 24,
-    textAlign: 'right',
-    fontSize: 13,
-    color: '#111827',
+    fontSize: 12,
+    fontWeight: '700',
   },
 });

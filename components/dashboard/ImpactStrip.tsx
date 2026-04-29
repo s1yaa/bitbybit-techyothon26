@@ -1,4 +1,6 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 interface Props {
   totalSorted: number;
@@ -7,53 +9,77 @@ interface Props {
 }
 
 const screenWidth = Dimensions.get('window').width;
-const cardWidth = (screenWidth - 32) / 3;
+const cardWidth = (screenWidth - 52) / 3; // 16px side padding × 2 + 2 gaps of 6
 
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.card}>
-      <Text style={styles.label}>{label}</Text>
-      <Text style={styles.value}>{value}</Text>
-    </View>
-  );
-}
+const CARDS = [
+  { key: 'sorted',    label: 'Items Sorted',     icon: 'leaf',         color: '#16A34A', bg: '#DCFCE7' },
+  { key: 'co2',       label: 'CO₂ Saved',         icon: 'cloud-outline', color: '#2563EB', bg: '#DBEAFE' },
+  { key: 'landfill',  label: 'Landfill Saved',    icon: 'trash-outline', color: '#D97706', bg: '#FEF3C7' },
+] as const;
 
-export default function ImpactStrip({
-  totalSorted,
-  co2Saved,
-  landfillDiverted,
-}: Props) {
+export default function ImpactStrip({ totalSorted, co2Saved, landfillDiverted }: Props) {
+  const values = {
+    sorted: totalSorted.toString(),
+    co2:    `${co2Saved} kg`,
+    landfill: `${landfillDiverted} kg`,
+  };
+
   return (
-    <View style={styles.container}>
-      <MetricCard label="sorted" value={totalSorted.toString()} />
-      <MetricCard label="co₂ saved" value={`${co2Saved} kg`} />
-      <MetricCard label="landfill" value={`${landfillDiverted} kg`} />
+    <View style={styles.row}>
+      {CARDS.map(({ key, label, icon, color, bg }, i) => (
+        <Animated.View
+          key={key}
+          entering={FadeInDown.delay(200 + i * 80).springify()}
+          style={[styles.card, { width: cardWidth }]}
+        >
+          <View style={[styles.iconWrap, { backgroundColor: bg }]}>
+            <Ionicons name={icon as any} size={18} color={color} />
+          </View>
+          <Text style={[styles.value, { color }]}>{values[key]}</Text>
+          <Text style={styles.label}>{label}</Text>
+        </Animated.View>
+      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  row: {
     flexDirection: 'row',
     gap: 8,
-    paddingHorizontal: 12,
-    marginTop: 16,
+    paddingHorizontal: 16,
   },
   card: {
-    width: cardWidth,
-    backgroundColor: '#F1EFE8',
-    borderRadius: 8,
-    padding: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 18,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 3,
+    alignItems: 'flex-start',
   },
-  label: {
-    fontSize: 12,
-    color: '#6b7280',
-    marginBottom: 4,
-    textTransform: 'lowercase',
+  iconWrap: {
+    width: 36,
+    height: 36,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   value: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: '#111827',
+    fontSize: 18,
+    fontWeight: '800',
+    letterSpacing: -0.3,
+    marginBottom: 2,
+  },
+  label: {
+    fontSize: 10,
+    color: '#9CA3AF',
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
 });

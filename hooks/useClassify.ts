@@ -54,6 +54,9 @@ export function useClassify(): UseClassifyReturn {
         userId: user?.id,
       })
 
+      // Keep the profile stats in sync
+      useUserStore.getState().incrementScans()
+
       logSortingEvent(result, user?.id).catch(() => { })
     } catch (err) {
       console.error('[useClassify] error:', err)

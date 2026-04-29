@@ -131,13 +131,15 @@ export default function RecyclingRateChart({ data }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 12,
-    backgroundColor: '#ffffff',
-    borderRadius: 16,
+    marginHorizontal: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
     padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 3,
   },
@@ -149,24 +151,26 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#111827',
   },
   subtitle: {
     fontSize: 11,
-    color: '#9ca3af',
+    color: '#9CA3AF',
     marginTop: 2,
   },
   badge: {
-    backgroundColor: '#dcfce7',
+    backgroundColor: '#DCFCE7',
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
   },
   badgeText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#16a34a',
+    fontWeight: '700',
+    color: '#16A34A',
   },
   chartArea: {
     height: CHART_H + 24,  // extra room for guide labels
