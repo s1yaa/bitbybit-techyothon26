@@ -1,7 +1,10 @@
+import BadgesSection from '@/components/dashboard/BadgesSection';
 import CategoryChart from '@/components/dashboard/CategoryChart';
 import ImpactStrip from '@/components/dashboard/ImpactStrip';
 import RecyclingRateChart from '@/components/dashboard/RecyclingRateChart';
 import StreakRow from '@/components/dashboard/StreakRow';
+import XPBanner from '@/components/gamification/XPBanner';
+import { useBadges } from '@/hooks/useBadges';
 import { useImpact } from '@/hooks/useImpact';
 import { useStreak } from '@/hooks/useStreak';
 import { Ionicons } from '@expo/vector-icons';
@@ -38,6 +41,7 @@ function SectionLabel({ icon, label, color, bg }: {
 export default function Dashboard() {
   const { totalSorted, co2Saved, landfillDiverted, breakdown, recyclingRateTrend } = useImpact();
   const { daysThisWeek } = useStreak();
+  const { badgeProgress, ecoLevel, unlockedCount, totalBadges } = useBadges();
 
   return (
     <ScrollView
@@ -60,8 +64,18 @@ export default function Dashboard() {
         </View>
       </Animated.View>
 
+      {/* ── XP / Eco Level ─────────────────────────────────── */}
+      <Animated.View entering={FadeInDown.delay(100).springify()}>
+        <SectionLabel icon="trophy" label="ECO LEVEL & XP" color="#16A34A" bg="#DCFCE7" />
+        <XPBanner
+          ecoLevel={ecoLevel}
+          unlockedBadges={unlockedCount}
+          totalBadges={totalBadges}
+        />
+      </Animated.View>
+
       {/* ── Impact strip ───────────────────────────────────── */}
-      <Animated.View entering={FadeInDown.delay(150).springify()}>
+      <Animated.View entering={FadeInDown.delay(200).springify()}>
         <SectionLabel icon="stats-chart" label="THIS WEEK'S STATS" color="#2563EB" bg="#DBEAFE" />
         <ImpactStrip
           totalSorted={totalSorted}
@@ -85,9 +99,15 @@ export default function Dashboard() {
       </Animated.View>
 
       {/* ── Daily streak ───────────────────────────────────── */}
-      <Animated.View entering={FadeInDown.delay(450).springify()}>
+      <Animated.View entering={FadeInDown.delay(500).springify()}>
         <SectionLabel icon="flame" label="DAILY STREAK" color="#DC2626" bg="#FEE2E2" />
         <StreakRow daysThisWeek={daysThisWeek} />
+      </Animated.View>
+
+      {/* ── Badges ─────────────────────────────────────────── */}
+      <Animated.View entering={FadeInDown.delay(600).springify()}>
+        <SectionLabel icon="medal" label="BADGES" color="#D97706" bg="#FEF3C7" />
+        <BadgesSection badges={badgeProgress} />
       </Animated.View>
     </ScrollView>
   );

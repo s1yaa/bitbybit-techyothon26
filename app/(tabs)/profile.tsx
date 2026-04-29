@@ -1,4 +1,6 @@
 import { supabase } from '@/lib/supabase';
+import { useBadges } from '@/hooks/useBadges';
+import BadgesSection from '@/components/dashboard/BadgesSection';
 import { useUserStore } from '@/store/userStore';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
@@ -145,6 +147,7 @@ function SettingRow({
 // ─── Main screen ─────────────────────────────────────────────────────────────
 export default function Profile() {
   const { user, totalScans: totalSorted, streakDays: streakCount, reset } = useUserStore();
+  const { badgeProgress, ecoLevel, unlockedCount } = useBadges();
   const userId = user?.id;
 
   const name = userId ? `Eco User #${userId.slice(0, 6).toUpperCase()}` : 'Guest';
@@ -230,6 +233,19 @@ export default function Profile() {
           delay={500}
         />
       </View>
+
+      {/* ── My Badges ─────────────────────────────────────── */}
+      <Animated.View entering={FadeInDown.delay(550).springify()} style={styles.section}>
+        <View style={styles.badgeHeader}>
+          <Text style={styles.sectionTitle}>My Badges</Text>
+          <View style={styles.badgeCountPill}>
+            <Text style={styles.badgeCountText}>
+              {unlockedCount}/{badgeProgress.length} unlocked • Lv.{ecoLevel.level} {ecoLevel.title}
+            </Text>
+          </View>
+        </View>
+        <BadgesSection badges={badgeProgress} />
+      </Animated.View>
 
       {/* ── Account Settings ─────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(600).springify()} style={styles.section}>
@@ -469,6 +485,25 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: 10,
     marginLeft: 4,
+  },
+  badgeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  badgeCountPill: {
+    backgroundColor: C.accentDim,
+    borderRadius: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
+  badgeCountText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: C.accent,
   },
   card: {
     backgroundColor: C.card,
