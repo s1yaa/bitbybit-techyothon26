@@ -6,21 +6,18 @@ interface Props {
 }
 
 const SCREEN_W = Dimensions.get('window').width;
-const CHART_H = 110; // max bar height in px
+const CHART_H = 110;
 
-/** Format ISO date string to short label like "Apr 28" */
 function formatLabel(iso: string): string {
   const d = new Date(iso + 'T00:00:00');
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-/** Returns true if this ISO date is today */
 function isToday(iso: string): boolean {
   return iso === new Date().toISOString().split('T')[0];
 }
 
 export default function RecyclingRateChart({ data }: Props) {
-  // Compute rolling 7-day average for the trend line label
   const activeDays = data.filter((d) => d.total > 0);
   const avgRate =
     activeDays.length === 0
@@ -28,13 +25,10 @@ export default function RecyclingRateChart({ data }: Props) {
       : Math.round(
           activeDays.reduce((sum, d) => sum + d.rate, 0) / activeDays.length
         );
-
-  // Show every other label to avoid cramping
   const showLabel = (i: number) => i % 2 === 0;
 
   return (
     <View style={styles.card}>
-      {/* Header */}
       <View style={styles.headerRow}>
         <View>
           <Text style={styles.title}>Recycling Rate</Text>
@@ -44,17 +38,13 @@ export default function RecyclingRateChart({ data }: Props) {
           <Text style={styles.badgeText}>{avgRate}% avg</Text>
         </View>
       </View>
-
-      {/* Bar chart */}
       <View style={styles.chartArea}>
-        {/* Horizontal guide lines */}
         {[100, 75, 50, 25].map((pct) => (
           <View
             key={pct}
             style={[styles.guideLine, { bottom: (pct / 100) * CHART_H }]}
           />
         ))}
-        {/* Guide labels */}
         {[100, 50].map((pct) => (
           <Text
             key={`lbl${pct}`}
@@ -63,8 +53,6 @@ export default function RecyclingRateChart({ data }: Props) {
             {pct}%
           </Text>
         ))}
-
-        {/* Bars */}
         <View style={styles.barsRow}>
           {data.map((point, i) => {
             const barH = Math.max((point.rate / 100) * CHART_H, point.total > 0 ? 3 : 0);
@@ -73,14 +61,11 @@ export default function RecyclingRateChart({ data }: Props) {
 
             return (
               <View key={point.date} style={styles.barWrapper}>
-                {/* Rate tooltip on top */}
                 {hasData && (
                   <Text style={[styles.barValue, today && styles.barValueToday]}>
                     {point.rate}%
                   </Text>
                 )}
-
-                {/* Bar itself */}
                 <View style={styles.barTrack}>
                   <View
                     style={[
@@ -97,8 +82,6 @@ export default function RecyclingRateChart({ data }: Props) {
                     ]}
                   />
                 </View>
-
-                {/* Date label */}
                 {showLabel(i) && (
                   <Text style={[styles.dateLabel, today && styles.dateLabelToday]}>
                     {today ? 'Today' : formatLabel(point.date)}
@@ -109,8 +92,6 @@ export default function RecyclingRateChart({ data }: Props) {
           })}
         </View>
       </View>
-
-      {/* Legend */}
       <View style={styles.legendRow}>
         <View style={styles.legendItem}>
           <View style={[styles.legendDot, { backgroundColor: '#4ade80' }]} />

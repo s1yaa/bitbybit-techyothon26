@@ -1,50 +1,40 @@
-# Welcome to your Expo app 👋
+# 🌿 EcoBin
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**AI-powered waste segregation in your pocket.** Scan. Sort. Save the planet. 🌍
 
-## Get started
+EcoBin uses Google Gemini AI to identify waste items from your camera and classify them into 5 Indian municipal waste categories — Wet, Dry, Recyclable, Hazardous, and E-waste — then tells you exactly which bin to use.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- 📷 **AI Scanner** — Point your camera at any waste item for instant classification
+- 🎯 **Smart Results** — Confidence scores, disposal tips, and text-to-speech guidance
+- 📊 **Impact Dashboard** — Track CO₂ saved, landfill diverted, and recycling rates
+- 🏆 **Leaderboard** — Compete with the community on weekly & all-time rankings
+- 🎮 **Gamification** — Earn XP, level up through 5 eco tiers, and unlock 7 badges
+- 🔥 **Streaks** — Daily sorting streak tracking with weekly view
+- 👤 **Profile** — Stats, badges, and account settings
 
-2. Start the app
+## Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+- **React Native** 0.81 + **Expo** SDK 54
+- **Google Gemini 3.1 Flash Lite** (vision model)
+- **Supabase** (auth + database)
+- **Zustand** (state management)
+- **React Native Reanimated** (animations)
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Get Started
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Environment Variables
 
-## Learn more
+Create a `.env` file with:
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+EXPO_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+```

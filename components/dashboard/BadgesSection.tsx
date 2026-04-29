@@ -10,23 +10,16 @@ function BadgeCard({ badge }: { badge: BadgeProgress }) {
 
   return (
     <View style={[styles.card, unlocked && styles.cardUnlocked]}>
-      {/* Emoji */}
       <View style={[styles.emojiCircle, unlocked ? styles.emojiCircleUnlocked : styles.emojiCircleLocked]}>
         <Text style={[styles.emoji, !unlocked && styles.emojiLocked]}>{emoji}</Text>
       </View>
-
-      {/* Text */}
       <Text style={[styles.badgeTitle, unlocked && styles.badgeTitleUnlocked]} numberOfLines={1}>
         {title}
       </Text>
       <Text style={styles.badgeDesc} numberOfLines={2}>{description}</Text>
-
-      {/* Progress bar */}
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { width: `${progress * 100}%`, backgroundColor: unlocked ? '#22c55e' : '#7DB87A' }]} />
       </View>
-
-      {/* Count / unlocked label */}
       <Text style={[styles.progressLabel, unlocked && styles.progressLabelUnlocked]}>
         {unlocked ? '✓ Unlocked!' : `${current} / ${target}`}
       </Text>

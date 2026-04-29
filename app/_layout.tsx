@@ -30,7 +30,6 @@ export default function RootLayout() {
     const client = supabase
     if (!client) return
 
-    // Restore existing session or sign in anonymously
     client.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUser({ id: session.user.id } as any)
@@ -41,7 +40,6 @@ export default function RootLayout() {
       }
     })
 
-    // Keep user in sync if the session refreshes
     const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser({ id: session.user.id } as any)

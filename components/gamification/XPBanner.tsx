@@ -31,7 +31,6 @@ export default function XPBanner({ ecoLevel, unlockedBadges, totalBadges }: Prop
 
   return (
     <View style={styles.card}>
-      {/* Level circle + info */}
       <View style={styles.row}>
         <View style={[styles.circle, { backgroundColor: ecoLevel.color }]}>
           <Text style={styles.circleText}>{levelIcon}</Text>
@@ -54,19 +53,14 @@ export default function XPBanner({ ecoLevel, unlockedBadges, totalBadges }: Prop
           <Text style={styles.badgePillText}>🏅 {unlockedBadges}/{totalBadges}</Text>
         </View>
       </View>
-
-      {/* Animated progress bar */}
       <View style={styles.track}>
         <Animated.View
           style={[styles.fill, { width: fillWidth, backgroundColor: ecoLevel.color }]}
         />
-        {/* Milestone dots */}
         {[0.33, 0.66].map((pos) => (
           <View key={pos} style={[styles.milestoneDot, { left: `${pos * 100}%` as any }]} />
         ))}
       </View>
-
-      {/* Level labels */}
       <View style={styles.levelLabels}>
         <Text style={styles.levelLabel}>Lv.{ecoLevel.level}</Text>
         <Text style={styles.progressPct}>{Math.round(ecoLevel.progress * 100)}%</Text>

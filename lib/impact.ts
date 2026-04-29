@@ -68,15 +68,10 @@ export interface RecyclingRatePoint {
   recyclable: number;
 }
 
-/**
- * Returns per-day recycling rate (recyclable / total * 100) for the last `days` days.
- * Days with no scans get rate = 0 and total = 0.
- */
 export function getRecyclingRateTrend(
   events: SortingEvent[],
   days = 14
 ): RecyclingRatePoint[] {
-  // Build a map of date -> { total, recyclable }
   const map: Record<string, { total: number; recyclable: number }> = {};
 
   for (let i = days - 1; i >= 0; i--) {

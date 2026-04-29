@@ -1,6 +1,5 @@
 import { supabase } from '@/lib/supabase';
 import { useBadges } from '@/hooks/useBadges';
-import BadgesSection from '@/components/dashboard/BadgesSection';
 import { useUserStore } from '@/store/userStore';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
@@ -21,14 +20,12 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-
-// ─── Palette ────────────────────────────────────────────────────────────────
 const C = {
   bg: '#FFFFFF',
   surface: '#F3F4F6',
   card: '#FFFFFF',
   border: '#E5E7EB',
-  accent: '#16A34A',      // eco-green
+  accent: '#16A34A',
   accentDim: '#DCFCE7',
   amber: '#D97706',
   amberDim: '#FEF3C7',
@@ -40,8 +37,6 @@ const C = {
   textSecondary: '#6B7280',
   textMuted: '#9CA3AF',
 };
-
-// ─── Glowing pulse ring around avatar ───────────────────────────────────────
 function PulseRing() {
   const scale = useSharedValue(1);
   const opacity = useSharedValue(0.6);
@@ -80,8 +75,6 @@ function PulseRing() {
     />
   );
 }
-
-// ─── Stat card ───────────────────────────────────────────────────────────────
 function StatCard({
   icon,
   value,
@@ -107,8 +100,6 @@ function StatCard({
     </Animated.View>
   );
 }
-
-// ─── Setting row ─────────────────────────────────────────────────────────────
 function SettingRow({
   icon,
   label,
@@ -143,11 +134,9 @@ function SettingRow({
     </Pressable>
   );
 }
-
-// ─── Main screen ─────────────────────────────────────────────────────────────
 export default function Profile() {
   const { user, totalScans: totalSorted, streakDays: streakCount, reset } = useUserStore();
-  const { badgeProgress, ecoLevel, unlockedCount } = useBadges();
+  const { ecoLevel } = useBadges();
   const userId = user?.id;
 
   const name = userId ? `Eco User #${userId.slice(0, 6).toUpperCase()}` : 'Guest';
@@ -176,9 +165,7 @@ export default function Profile() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* ── Hero Header ─────────────────────────────────────── */}
       <View style={styles.hero}>
-        {/* dark gradient strip */}
         <View style={styles.heroBg} />
 
         <Animated.View entering={FadeInUp.delay(100).springify()} style={styles.avatarWrap}>
@@ -205,8 +192,6 @@ export default function Profile() {
           <Text style={styles.email}>{user?.email ?? 'Anonymous member'}</Text>
         </Animated.View>
       </View>
-
-      {/* ── Stats ───────────────────────────────────────────── */}
       <View style={styles.statsRow}>
         <StatCard
           icon="leaf"
@@ -226,28 +211,13 @@ export default function Profile() {
         />
         <StatCard
           icon="star"
-          value={Math.floor(totalSorted * 10)}
+          value={ecoLevel.points}
           label="Eco Points"
           iconColor={C.blue}
           bgColor={C.blueDim}
           delay={500}
         />
       </View>
-
-      {/* ── My Badges ─────────────────────────────────────── */}
-      <Animated.View entering={FadeInDown.delay(550).springify()} style={styles.section}>
-        <View style={styles.badgeHeader}>
-          <Text style={styles.sectionTitle}>My Badges</Text>
-          <View style={styles.badgeCountPill}>
-            <Text style={styles.badgeCountText}>
-              {unlockedCount}/{badgeProgress.length} unlocked • Lv.{ecoLevel.level} {ecoLevel.title}
-            </Text>
-          </View>
-        </View>
-        <BadgesSection badges={badgeProgress} />
-      </Animated.View>
-
-      {/* ── Account Settings ─────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(600).springify()} style={styles.section}>
         <Text style={styles.sectionTitle}>Account Settings</Text>
         <View style={styles.card}>
@@ -275,17 +245,15 @@ export default function Profile() {
           />
         </View>
       </Animated.View>
-
-      {/* ── App Section ──────────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(700).springify()} style={styles.section}>
         <Text style={styles.sectionTitle}>App</Text>
         <View style={styles.card}>
           <SettingRow
             icon="information-circle"
-            label="About BitByBit"
+            label="About EcoBin"
             iconColor={C.blue}
             iconBg={C.blueDim}
-            onPress={() => Alert.alert('BitByBit', 'Making the world greener, one scan at a time 🌿')}
+            onPress={() => Alert.alert('EcoBin', 'Making the world greener, one scan at a time 🌿')}
           />
           <SettingRow
             icon="star"
@@ -297,8 +265,6 @@ export default function Profile() {
           />
         </View>
       </Animated.View>
-
-      {/* ── Sign Out ─────────────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(800).springify()}>
         <Pressable
           style={({ pressed }) => [styles.signOutBtn, pressed && { opacity: 0.75 }]}
@@ -311,12 +277,10 @@ export default function Profile() {
         </Pressable>
       </Animated.View>
 
-      <Text style={styles.version}>BitByBit v1.0.0</Text>
+      <Text style={styles.version}>EcoBin v1.0.0</Text>
     </ScrollView>
   );
 }
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -325,8 +289,6 @@ const styles = StyleSheet.create({
   content: {
     paddingBottom: 48,
   },
-
-  // Hero
   hero: {
     alignItems: 'center',
     paddingTop: 60,
@@ -426,8 +388,6 @@ const styles = StyleSheet.create({
     color: C.textMuted,
     marginTop: 2,
   },
-
-  // Stats
   statsRow: {
     flexDirection: 'row',
     gap: 10,
@@ -471,8 +431,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.3,
     textAlign: 'center',
   },
-
-  // Section
   section: {
     paddingHorizontal: 20,
     marginBottom: 16,
@@ -512,8 +470,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.border,
   },
-
-  // Setting row
   settingRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -545,8 +501,6 @@ const styles = StyleSheet.create({
     color: C.textPrimary,
     fontWeight: '500',
   },
-
-  // Sign out
   signOutBtn: {
     marginHorizontal: 20,
     marginTop: 8,

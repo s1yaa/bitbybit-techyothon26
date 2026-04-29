@@ -4,7 +4,7 @@ import { SortingEvent, WasteCategory } from '@/types';
 export interface BadgeProgress extends BadgeDefinition {
   current: number;
   unlocked: boolean;
-  progress: number; // 0–1
+  progress: number;
 }
 
 export interface EcoLevelInfo {
@@ -12,7 +12,7 @@ export interface EcoLevelInfo {
   title: string;
   color: string;
   points: number;
-  progress: number;       // 0–1 within current level
+  progress: number;
   nextLevelPoints: number | null;
 }
 

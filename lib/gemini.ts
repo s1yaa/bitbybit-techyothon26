@@ -2,8 +2,6 @@ import { GoogleGenerativeAI, Schema, SchemaType } from '@google/generative-ai';
 import type { ClassificationResult, WasteCategory } from '../types';
 
 const VALID_CATEGORIES: WasteCategory[] = ['wet', 'dry', 'recyclable', 'hazardous', 'ewaste']
-
-// Explicitly typing as Schema to avoid the TypeScript errors from before
 const responseSchema: Schema = {
   type: SchemaType.OBJECT,
   properties: {
@@ -39,8 +37,6 @@ export async function classifyWaste(
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-
-    // Updated to the 3.1 Flash Lite model from your screenshot
     const model = genAI.getGenerativeModel({
       model: 'gemini-3.1-flash-lite-preview',
       generationConfig: {

@@ -12,7 +12,6 @@ export default function StreakRow({ daysThisWeek }: Props) {
 
   return (
     <View style={styles.card}>
-      {/* Streak summary */}
       <View style={styles.summaryRow}>
         <View style={styles.summaryLeft}>
           <View style={styles.flameWrap}>
@@ -35,8 +34,6 @@ export default function StreakRow({ daysThisWeek }: Props) {
           </Text>
         </View>
       </View>
-
-      {/* Day pips */}
       <View style={styles.pipsRow}>
         {DAYS.map((day, index) => {
           const active = daysThisWeek[index];

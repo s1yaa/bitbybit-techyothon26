@@ -9,8 +9,6 @@ import {
   View,
 } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
-
-// ─── Types ───────────────────────────────────────────────────────────────────
 interface LeaderEntry {
   rank: number;
   name: string;
@@ -20,8 +18,6 @@ interface LeaderEntry {
   badge: string;
   isMe?: boolean;
 }
-
-// ─── Mock data ────────────────────────────────────────────────────────────────
 const WEEKLY_DATA: LeaderEntry[] = [
   { rank: 1, name: 'GreenQueen', avatar: 'GQ', xp: 2840, level: 'Forest Guardian', badge: '🌲' },
   { rank: 2, name: 'EcoNinja07', avatar: 'EN', xp: 2210, level: 'Forest Guardian', badge: '🌲' },
@@ -47,14 +43,12 @@ const ALLTIME_DATA: LeaderEntry[] = [
   { rank: 9, name: 'BioBuddy', avatar: 'BB', xp: 2200, level: 'Leaf', badge: '🍃' },
   { rank: 10, name: 'SortStar', avatar: 'SS', xp: 1600, level: 'Sprout', badge: '🌱' },
 ];
-
-// ─── Podium card ─────────────────────────────────────────────────────────────
 const PODIUM_CONFIG = [
   { height: 90, color: '#F59E0B', bg: '#FEF3C7', border: '#FDE68A', crown: '👑', delay: 100 },
   { height: 110, color: '#EAB308', bg: '#FEFCE8', border: '#FEF08A', crown: '🥇', delay: 50 },
   { height: 70, color: '#9CA3AF', bg: '#F9FAFB', border: '#E5E7EB', crown: '🥉', delay: 150 },
 ];
-const PODIUM_ORDER = [1, 0, 2]; // silver left, gold center, bronze right
+const PODIUM_ORDER = [1, 0, 2];
 
 function PodiumCard({ entry, configIndex }: { entry: LeaderEntry; configIndex: number }) {
   const cfg = PODIUM_CONFIG[configIndex];
@@ -76,8 +70,6 @@ function PodiumCard({ entry, configIndex }: { entry: LeaderEntry; configIndex: n
     </Animated.View>
   );
 }
-
-// ─── Rank row ─────────────────────────────────────────────────────────────────
 function RankRow({ entry, index }: { entry: LeaderEntry; index: number }) {
   const isMe = !!entry.isMe;
   return (
@@ -102,8 +94,6 @@ function RankRow({ entry, index }: { entry: LeaderEntry; index: number }) {
     </Animated.View>
   );
 }
-
-// ─── Main Screen ──────────────────────────────────────────────────────────────
 export default function Leaderboard() {
   const [tab, setTab] = useState<'weekly' | 'alltime'>('weekly');
   const { ecoLevel } = useBadges();
@@ -111,8 +101,6 @@ export default function Leaderboard() {
   const baseData = tab === 'weekly' ? WEEKLY_DATA : ALLTIME_DATA;
   const myXP = ecoLevel.points;
   const myRank = baseData.filter((e) => e.xp > myXP).length + 1;
-
-  // Build full list with user injected
   const myEntry: LeaderEntry = {
     rank: myRank,
     name: 'You',
@@ -133,7 +121,6 @@ export default function Leaderboard() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* ── Header ──────────────────────────────────────────── */}
       <Animated.View entering={FadeInUp.delay(0).springify()} style={styles.header}>
         <View style={styles.heroBg} />
         <View style={styles.headerInner}>
@@ -146,8 +133,6 @@ export default function Leaderboard() {
             <Text style={styles.myRankNum}>#{myRank}</Text>
           </View>
         </View>
-
-        {/* Toggle */}
         <View style={styles.toggle}>
           <Pressable
             style={[styles.toggleBtn, tab === 'weekly' && styles.toggleBtnActive]}
@@ -167,15 +152,11 @@ export default function Leaderboard() {
           </Pressable>
         </View>
       </Animated.View>
-
-      {/* ── Podium ──────────────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.podiumRow}>
         {PODIUM_ORDER.map((dataIdx, i) => (
           <PodiumCard key={top3[dataIdx].rank} entry={top3[dataIdx]} configIndex={i} />
         ))}
       </Animated.View>
-
-      {/* ── Rank list 4–10 ──────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(200).springify()} style={styles.rankList}>
         <Text style={styles.listLabel}>
           <Ionicons name="list" size={12} /> RANKINGS
@@ -184,8 +165,6 @@ export default function Leaderboard() {
           <RankRow key={entry.rank} entry={entry} index={i} />
         ))}
       </Animated.View>
-
-      {/* ── Your rank (pinned if outside top 10) ────────────── */}
       {!isInTop10 && (
         <Animated.View entering={FadeInDown.delay(400).springify()} style={styles.myRankSection}>
           <Text style={styles.listLabel}>YOUR POSITION</Text>
@@ -210,13 +189,9 @@ export default function Leaderboard() {
     </ScrollView>
   );
 }
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#FFFFFF' },
   content: { paddingBottom: 48 },
-
-  // Header
   header: { marginBottom: 8 },
   heroBg: {
     ...StyleSheet.absoluteFillObject,
@@ -245,8 +220,6 @@ const styles = StyleSheet.create({
   },
   myRankLabel: { fontSize: 10, color: 'rgba(255,255,255,0.8)', fontWeight: '600' },
   myRankNum: { fontSize: 22, fontWeight: '800', color: '#fff' },
-
-  // Toggle
   toggle: {
     flexDirection: 'row',
     marginHorizontal: 20,
@@ -264,8 +237,6 @@ const styles = StyleSheet.create({
   toggleBtnActive: { backgroundColor: '#fff', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 4, elevation: 2 },
   toggleText: { fontSize: 13, fontWeight: '600', color: '#9CA3AF' },
   toggleTextActive: { color: '#111827' },
-
-  // Podium
   podiumRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -304,8 +275,6 @@ const styles = StyleSheet.create({
   },
   podiumRank: { fontSize: 16, fontWeight: '800', color: '#fff' },
   podiumXP: { fontSize: 11, color: 'rgba(255,255,255,0.85)', fontWeight: '600' },
-
-  // Rank list
   rankList: { paddingHorizontal: 16, marginBottom: 8 },
   listLabel: {
     fontSize: 10,
@@ -352,12 +321,8 @@ const styles = StyleSheet.create({
   rankXP: { fontSize: 15, fontWeight: '800', color: '#111827' },
   rankXPMe: { color: '#16A34A' },
   rankXPLabel: { fontSize: 9, color: '#9CA3AF', fontWeight: '600' },
-
-  // My rank section
   myRankSection: { paddingHorizontal: 16, marginTop: 8 },
   keepGoingText: { textAlign: 'center', fontSize: 12, color: '#6B7280', marginTop: 8, marginBottom: 4 },
-
-  // Congrats
   congrats: {
     marginHorizontal: 20,
     marginTop: 12,

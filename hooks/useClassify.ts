@@ -43,8 +43,6 @@ export function useClassify(): UseClassifyReturn {
 
       setImageUri(imageUri)
       setResult(result)
-
-      // Push into the live scan store so dashboard updates immediately
       useScanStore.getState().addEvent({
         id: Date.now().toString(),
         category: result.category,
@@ -53,8 +51,6 @@ export function useClassify(): UseClassifyReturn {
         timestamp: new Date().toISOString(),
         userId: user?.id,
       })
-
-      // Keep the profile stats in sync
       useUserStore.getState().incrementScans()
 
       logSortingEvent(result, user?.id).catch(() => { })

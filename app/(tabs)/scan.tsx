@@ -32,17 +32,11 @@ export default function ScanScreen() {
   const result = useClassificationStore((s) => s.result)
   const reset = useClassificationStore((s) => s.reset)
   const streakDays = useUserStore((s) => s.streakDays)
-
-  // Track whether we intentionally started a capture in this session
   const didCapture = useRef(false)
-
-  // Clear any stale result from a previous scan when this screen mounts
   useEffect(() => {
     reset()
     didCapture.current = false
   }, [])
-
-  // Navigate to result only after a capture we started ourselves
   useEffect(() => {
     if (result && !isLoading && didCapture.current) {
       didCapture.current = false
@@ -65,7 +59,6 @@ export default function ScanScreen() {
       if (photo?.uri) {
         await classify(photo.uri)
       } else {
-        // Photo failed; reset the flag so the guard stays correct
         didCapture.current = false
       }
     } catch (err) {
@@ -126,7 +119,7 @@ export default function ScanScreen() {
       <ScanFrame />
 
       <View style={styles.topBar}>
-        <Text style={styles.appTitle}>SortIt</Text>
+        <Text style={styles.appTitle}>EcoBin</Text>
 
         {streakDays > 0 && (
           <View style={styles.streakBadge}>

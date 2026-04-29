@@ -25,8 +25,6 @@ export async function logSortingEvent(
       timestamp: new Date().toISOString(),
       userId,
     }
-
-    // Fall back to the live session user ID in case the store hasn't hydrated yet
     const resolvedUserId =
       event.userId ?? (await supabase.auth.getUser()).data.user?.id ?? null
 

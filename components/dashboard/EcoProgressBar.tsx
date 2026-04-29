@@ -26,7 +26,6 @@ export default function EcoProgressBar({ ecoLevel, unlockedCount, totalBadges }:
 
   return (
     <View style={styles.card}>
-      {/* Top row */}
       <View style={styles.topRow}>
         <View style={[styles.levelCircle, { backgroundColor: ecoLevel.color }]}>
           <Text style={styles.levelNum}>{ecoLevel.level}</Text>
@@ -39,17 +38,12 @@ export default function EcoProgressBar({ ecoLevel, unlockedCount, totalBadges }:
           <Text style={styles.badgePillText}>🏅 {unlockedCount}/{totalBadges} badges</Text>
         </View>
       </View>
-
-      {/* Progress bar */}
       <View style={styles.track}>
         <Animated.View style={[styles.fill, { width: fillWidth, backgroundColor: ecoLevel.color }]} />
-        {/* Milestone dots */}
         {[0.25, 0.5, 0.75].map((pos) => (
           <View key={pos} style={[styles.dot, { left: `${pos * 100}%` }]} />
         ))}
       </View>
-
-      {/* Bottom label */}
       <View style={styles.bottomRow}>
         <Text style={styles.lvLabel}>Lv.{ecoLevel.level}</Text>
         <Text style={styles.nextLabel}>

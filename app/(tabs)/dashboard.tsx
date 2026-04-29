@@ -49,7 +49,6 @@ export default function Dashboard() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      {/* ── Header ─────────────────────────────────────────── */}
       <Animated.View entering={FadeInUp.delay(50).springify()} style={styles.header}>
         <View style={styles.heroBg} />
         <View style={styles.headerTop}>
@@ -64,7 +63,6 @@ export default function Dashboard() {
         </View>
       </Animated.View>
 
-      {/* ── XP / Eco Level ─────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(100).springify()}>
         <SectionLabel icon="trophy" label="ECO LEVEL & XP" color="#16A34A" bg="#DCFCE7" />
         <XPBanner
@@ -74,7 +72,6 @@ export default function Dashboard() {
         />
       </Animated.View>
 
-      {/* ── Impact strip ───────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(200).springify()}>
         <SectionLabel icon="stats-chart" label="THIS WEEK'S STATS" color="#2563EB" bg="#DBEAFE" />
         <ImpactStrip
@@ -84,7 +81,6 @@ export default function Dashboard() {
         />
       </Animated.View>
 
-      {/* ── Category breakdown ─────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(250).springify()}>
         <SectionLabel icon="pie-chart" label="BREAKDOWN BY CATEGORY" color="#D97706" bg="#FEF3C7" />
         <View style={styles.card}>
@@ -92,19 +88,16 @@ export default function Dashboard() {
         </View>
       </Animated.View>
 
-      {/* ── Recycling rate chart ────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(350).springify()}>
         <SectionLabel icon="trending-up" label="RECYCLING RATE OVER TIME" color="#16A34A" bg="#DCFCE7" />
         <RecyclingRateChart data={recyclingRateTrend} />
       </Animated.View>
 
-      {/* ── Daily streak ───────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(500).springify()}>
         <SectionLabel icon="flame" label="DAILY STREAK" color="#DC2626" bg="#FEE2E2" />
         <StreakRow daysThisWeek={daysThisWeek} />
       </Animated.View>
 
-      {/* ── Badges ─────────────────────────────────────────── */}
       <Animated.View entering={FadeInDown.delay(600).springify()}>
         <SectionLabel icon="medal" label="BADGES" color="#D97706" bg="#FEF3C7" />
         <BadgesSection badges={badgeProgress} />
@@ -122,7 +115,6 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
 
-  // Header
   header: {
     marginBottom: 4,
   },
@@ -172,7 +164,6 @@ const styles = StyleSheet.create({
     borderColor: '#BBF7D0',
   },
 
-  // Section label
   sectionLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -195,7 +186,6 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
 
-  // Generic card wrapper for components that don't self-wrap
   card: {
     marginHorizontal: 16,
     backgroundColor: '#FFFFFF',

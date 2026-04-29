@@ -15,11 +15,9 @@ export interface BadgeDefinition {
 }
 
 export const BADGE_DEFINITIONS: BadgeDefinition[] = [
-  // Beginner
   { id: 'first_step', emoji: '🌿', title: 'First Step', description: 'Complete your first scan', tier: 'beginner', type: 'total', target: 1 },
   { id: 'getting_clean', emoji: '🧼', title: 'Getting Clean', description: 'Scan 5 items total', tier: 'beginner', type: 'total', target: 5 },
   { id: 'sorting_rookie', emoji: '🗂️', title: 'Sorting Rookie', description: 'Use app on 3 different days', tier: 'beginner', type: 'days', target: 3 },
-  // Advanced
   { id: 'plastic_hero', emoji: '🧴', title: 'Plastic Hero', description: '20 recyclable items', tier: 'advanced', type: 'category', category: 'recyclable', target: 20 },
   { id: 'compost_king', emoji: '🍃', title: 'Compost King', description: '15 wet waste items', tier: 'advanced', type: 'category', category: 'wet', target: 15 },
   { id: 'dry_master', emoji: '📦', title: 'Dry Master', description: '20 dry waste items', tier: 'advanced', type: 'category', category: 'dry', target: 20 },
