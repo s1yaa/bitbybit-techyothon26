@@ -8,9 +8,10 @@ import { useBadges } from '@/hooks/useBadges';
 import { useImpact } from '@/hooks/useImpact';
 import { useStreak } from '@/hooks/useStreak';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
+import CampusImpactView from '@/components/dashboard/CampusImpactView';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -42,6 +43,7 @@ export default function Dashboard() {
   const { totalSorted, co2Saved, landfillDiverted, breakdown, recyclingRateTrend } = useImpact();
   const { daysThisWeek } = useStreak();
   const { badgeProgress, ecoLevel, unlockedCount, totalBadges } = useBadges();
+  const [viewMode, setViewMode] = useState<'personal' | 'campus'>('personal');
 
   return (
     <ScrollView
@@ -54,14 +56,34 @@ export default function Dashboard() {
         <View style={styles.headerTop}>
           <View>
             <Text style={styles.greeting}>{getGreeting()} 👋</Text>
-            <Text style={styles.headingLarge}>Your Impact</Text>
+            <Text style={styles.headingLarge}>{viewMode === 'personal' ? 'Your Impact' : 'Campus Impact'}</Text>
             <Text style={styles.todayLabel}>{getTodayLabel()}</Text>
           </View>
           <View style={styles.leafBadge}>
-            <Ionicons name="leaf" size={22} color="#16A34A" />
+            <Ionicons name={viewMode === 'personal' ? 'leaf' : 'business'} size={22} color={viewMode === 'personal' ? '#16A34A' : '#2563EB'} />
           </View>
         </View>
+
+        <View style={styles.toggleContainer}>
+          <TouchableOpacity 
+            style={[styles.toggleButton, viewMode === 'personal' && styles.toggleButtonActive]}
+            onPress={() => setViewMode('personal')}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.toggleText, viewMode === 'personal' && styles.toggleTextActive]}>Personal</Text>
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.toggleButton, viewMode === 'campus' && styles.toggleButtonActive]}
+            onPress={() => setViewMode('campus')}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.toggleText, viewMode === 'campus' && styles.toggleTextActive]}>Campus</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
+
+      {viewMode === 'personal' ? (
+        <View style={{ flex: 1 }}>
 
       <Animated.View entering={FadeInDown.delay(100).springify()}>
         <SectionLabel icon="trophy" label="ECO LEVEL & XP" color="#16A34A" bg="#DCFCE7" />
@@ -102,6 +124,10 @@ export default function Dashboard() {
         <SectionLabel icon="medal" label="BADGES" color="#D97706" bg="#FEF3C7" />
         <BadgesSection badges={badgeProgress} />
       </Animated.View>
+        </View>
+      ) : (
+        <CampusImpactView />
+      )}
     </ScrollView>
   );
 }
@@ -132,7 +158,37 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: 20,
     paddingTop: 56,
-    paddingBottom: 28,
+    paddingBottom: 16,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: '#E5E7EB',
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 12,
+    padding: 4,
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  toggleButtonActive: {
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  toggleText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6B7280',
+  },
+  toggleTextActive: {
+    color: '#111827',
   },
   greeting: {
     fontSize: 13,

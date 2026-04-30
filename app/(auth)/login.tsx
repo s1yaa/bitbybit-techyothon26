@@ -87,7 +87,6 @@ export default function LoginScreen() {
 
   const handleGuest = useCallback(async () => {
     if (!supabase) {
-      // No Supabase — just enter as a local guest
       navigateToApp('guest-' + Date.now());
       return;
     }
@@ -112,7 +111,6 @@ export default function LoginScreen() {
     >
       <StatusBar barStyle="light-content" />
 
-      {/* ── Background gradient blobs ── */}
       <View style={styles.blob1} />
       <View style={styles.blob2} />
 
@@ -121,7 +119,6 @@ export default function LoginScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* ── Logo / Hero ── */}
         <Animated.View entering={FadeInUp.delay(60).springify()} style={styles.hero}>
           <View style={styles.logoRing}>
             <Ionicons name="leaf" size={36} color="#16A34A" />
@@ -130,9 +127,7 @@ export default function LoginScreen() {
           <Text style={styles.tagline}>Smart waste, cleaner planet 🌿</Text>
         </Animated.View>
 
-        {/* ── Card ── */}
         <Animated.View entering={FadeInDown.delay(150).springify()} style={styles.card}>
-          {/* Tab switcher */}
           <View style={styles.tabRow}>
             <Pressable
               style={[styles.tab, mode === 'signin' && styles.tabActive]}
@@ -152,7 +147,6 @@ export default function LoginScreen() {
             </Pressable>
           </View>
 
-          {/* Email */}
           <View style={styles.fieldWrap}>
             <Text style={styles.fieldLabel}>Email</Text>
             <View style={styles.inputRow}>
@@ -171,7 +165,6 @@ export default function LoginScreen() {
             </View>
           </View>
 
-          {/* Password */}
           <View style={styles.fieldWrap}>
             <Text style={styles.fieldLabel}>Password</Text>
             <View style={styles.inputRow}>
@@ -198,7 +191,6 @@ export default function LoginScreen() {
             </View>
           </View>
 
-          {/* Primary CTA */}
           <TouchableOpacity
             style={[styles.primaryBtn, isLoading && styles.primaryBtnDisabled]}
             onPress={handleEmailAuth}
@@ -214,14 +206,12 @@ export default function LoginScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Divider */}
           <View style={styles.dividerRow}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerText}>or</Text>
             <View style={styles.dividerLine} />
           </View>
 
-          {/* Guest */}
           <TouchableOpacity
             style={styles.guestBtn}
             onPress={handleGuest}
@@ -232,7 +222,6 @@ export default function LoginScreen() {
             <Text style={styles.guestBtnText}>Continue as Guest</Text>
           </TouchableOpacity>
 
-          {/* Toggle link */}
           <Pressable onPress={toggleMode} style={styles.toggleRow}>
             <Text style={styles.toggleText}>
               {mode === 'signin' ? "Don't have an account? " : 'Already have an account? '}
@@ -243,7 +232,6 @@ export default function LoginScreen() {
           </Pressable>
         </Animated.View>
 
-        {/* ── Footer note ── */}
         <Animated.Text entering={FadeInDown.delay(300).springify()} style={styles.footerNote}>
           Your scan history is saved to your account and synced across devices.
         </Animated.Text>
@@ -258,7 +246,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F172A',
   },
 
-  // Background blobs
   blob1: {
     position: 'absolute',
     top: -60,
@@ -287,7 +274,6 @@ const styles = StyleSheet.create({
     paddingVertical: 48,
   },
 
-  // Hero
   hero: {
     alignItems: 'center',
     marginBottom: 36,
@@ -320,7 +306,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 
-  // Card
   card: {
     backgroundColor: '#1E293B',
     borderRadius: 28,
@@ -334,7 +319,6 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
 
-  // Tabs
   tabRow: {
     flexDirection: 'row',
     backgroundColor: '#0F172A',
@@ -365,7 +349,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 
-  // Fields
   fieldWrap: {
     marginBottom: 16,
   },
@@ -400,7 +383,6 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
 
-  // Primary button
   primaryBtn: {
     backgroundColor: '#16A34A',
     borderRadius: 14,
@@ -424,7 +406,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 
-  // Divider
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -442,7 +423,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Guest button
   guestBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -460,7 +440,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Toggle
   toggleRow: {
     alignItems: 'center',
     marginTop: 20,
@@ -475,7 +454,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
-  // Footer
   footerNote: {
     textAlign: 'center',
     color: '#334155',
