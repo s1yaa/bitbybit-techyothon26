@@ -10,6 +10,7 @@ EcoBin uses Google Gemini AI to identify waste items from your camera and classi
 - 🎯 **Smart Results** — Confidence scores, disposal tips, and hands-free text-to-speech audio guidance.
 - 📍 **Nearby Disposal Locator** — Interactive map showing nearby E-Waste, Battery, and Hazardous waste drop-off points based on your real-time GPS location.
 - 🔔 **Smart Reminders** — Local, privacy-first push notifications scheduled automatically to remind you the night before your specific residential zone's collection days.
+- 🏫 **Campus Impact** — View a real-time live feed of community sorting activity and track collective campus impact metrics.
 - 📊 **Impact Dashboard** — Track your personal environmental impact: CO₂ saved, landfill diverted, and your overall recycling rate.
 - 🏆 **Leaderboard** — Compete with the community on weekly & all-time eco-rankings.
 - 🎮 **Gamification** — Earn XP, level up through 5 eco tiers, and unlock beautiful achievement badges.
